@@ -9,27 +9,20 @@ x-variables: &x-variables
   MINIO_SECRET_KEY: h15QXfIaJVdcTQdqTQm6pYwYjFa7x87TfhF47CPf
 
 services:
-  nginx:
-    image: medley/nginx
-    build:
-     context: ./
-     dockerfile: Dockerfile-nginx
-    environment: *x-variables
-    ports:
-     - "8000:443"
-    depends_on:
-     - fpm
   fpm:
-    image: medley/selfhosted-agent
+    image: medleybox/import
     build:
       context: ./
       dockerfile: Dockerfile
     environment: *x-variables
-    # volumes:
-    #  - ./bin:/var/www/bin
-    #  - ./src:/var/www/src
-    #  - ./templates:/var/www/templates
-    #  - ./vendor:/var/www/vendor
+    ports:
+     - "8084:80"
+    volumes:
+      - ./bin:/var/www/bin
+      - ./config:/var/www/config
+      - ./src:/var/www/src
+      - ./templates:/var/www/templates
+      - ./vendor:/var/www/vendor
 
   minio:
     image: minio/minio

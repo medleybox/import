@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo "here";
+
+nginx && 
+
+echo "here";
+docker-php-entrypoint php-fpm

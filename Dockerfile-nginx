@@ -1,3 +1,0 @@
-FROM xigen/nginx
-
-COPY public/index.php /var/www/public/index.php

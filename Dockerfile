@@ -8,19 +8,27 @@ RUN composer install -vvv -o -a --no-scripts --ignore-platform-reqs
 
 FROM xigen/php:fpm-73
 
-
 ENV APP_ENV dev
 
 RUN apk add --update --no-cache ca-certificates curl ffmpeg python gnupg py-pip \
   && pip install -U youtube-dl
 
-
 COPY . /var/www
 COPY --from=composer /app/vendor /var/www/vendor
 
 RUN chmod +x /var/www/bin/console \
-  && mkdir /var/www/var/tmp \
-  && chmod 777 /var/www/var/tmp \
-  && chown -Rf 82:82 /var/www
+&& mkdir /var/www/var/tmp \
+&& chmod 777 /var/www/var/tmp \
+&& chown -Rf 82:82 /var/www
 
-USER 82
+RUN apk add nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN mkdir -p /var/tmp/nginx/client_body && chmod 777 /var/tmp/nginx/client_body \
+  && mkdir -p /var/www/log/nginx && chmod 777 /var/www/log/nginx \
+  && touch /var/www/log/nginx/error.log && chmod 777 /var/www/log/nginx/error.log
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+
+ENTRYPOINT ["/var/www/bin/docker-entrypoint"]
