@@ -7,3 +7,13 @@ list:
     resource: "Controller/ListController.php"
     type: annotation
     prefix: /api/list/
+
+import:
+    resource: "Controller/ImportController.php"
+    type: annotation
+    prefix: /api/import/
+
+delete:
+    resource: "Controller/DeleteController.php"
+    type: annotation
+    prefix: /api/delete/

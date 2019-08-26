@@ -3,13 +3,13 @@ version: '3.7'
 x-variables: &x-variables
   APP_ENV: dev
   APP_SECRET: c95ab68cbfba3232e79d72ebae567424
-  MINIO_ENDPOINT: http://minio:9000
+  MINIO_ENDPOINT: http://10.10.1.61:9001
   MINIO_ACCESS_KEY: medley
   MINIO_BUCKET: medley
   MINIO_SECRET_KEY: h15QXfIaJVdcTQdqTQm6pYwYjFa7x87TfhF47CPf
 
 services:
-  fpm:
+  import:
     image: medleybox/import
     build:
       context: ./

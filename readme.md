@@ -1,6 +1,6 @@
-# Medley selfhosting agent
+# Medleybox import
 
 Development
 ```
-docker-compose build; docker-compose up -d --force-recreate
+bin/docker-up
 ```

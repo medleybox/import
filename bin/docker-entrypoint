@@ -1,8 +1,10 @@
 #!/bin/sh
 
+whoami
+
 echo "here";
 
-nginx && 
+nginx &&
 
 echo "here";
 docker-php-entrypoint php-fpm

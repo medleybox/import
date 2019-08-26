@@ -28,10 +28,10 @@ class Youtube
     public function getIdFromUrl($url)
     {
         preg_match('/[a-zA-Z0-9\-_]{11}/m', $url, $match);
-	if ([] !== $match && 1 === count($match)) {
+        if ([] !== $match && 1 === count($match)) {
             return $match[0];
         }
-        
+
         parse_str(parse_url($url, PHP_URL_QUERY), $params);
         print_r($params);
 
@@ -44,7 +44,7 @@ class Youtube
 
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = str_replace(['_', '-'], '', $id);
 
         return $this;
     }
@@ -68,6 +68,10 @@ class Youtube
         }
 
         $file = $process->getOutput();
+        if ("" === $file) {
+            return false;
+        }
+
         $this->minio->upload($file, "{$this->folder}/{$file}");
 
         return $this->check();
@@ -80,12 +84,28 @@ class Youtube
             return false;
         }
 
+
         return $this->minio->stream($path);
     }
 
     public function fetchAll()
     {
-        return $this->minio->listContents($this->folder, true);
+        $return = [];
+        $files = $this->minio->listContents($this->folder, true);
+        foreach ($files as $file) {
+            $file = $file + [
+                'src' => $this->getSourceLink($file['basename'])
+            ];
+
+            $return[] = $file;
+        }
+
+        return $return;
+    }
+
+    protected function getSourceLink($basename)
+    {
+        return "/stream/youtube/{$basename}";
     }
 
     private function check()
@@ -97,6 +117,10 @@ class Youtube
             if ($this->minio->has($check)) {
                 return $check;
             }
+        }
+
+        if ($this->minio->has($path)) {
+            return $path;
         }
 
         return false;

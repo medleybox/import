@@ -10,18 +10,25 @@ FROM xigen/php:fpm-73
 
 ENV APP_ENV dev
 
-RUN apk add --update --no-cache ca-certificates curl ffmpeg python gnupg py-pip \
+COPY --from=composer /app/vendor /var/www/vendor
+
+RUN apk add --update --no-cache ca-certificates curl ffmpeg python gnupg py-pip nginx \
   && pip install -U youtube-dl
 
-COPY . /var/www
-COPY --from=composer /app/vendor /var/www/vendor
+# COPY bin/ /var/www/bin
+# COPY config/ /var/www/config
+# COPY public/index.php /var/www/public/index.php
+# COPY src/ /var/www/src
+# COPY templates/ /var/www/templates
+
+COPY . /var/www/
 
 RUN chmod +x /var/www/bin/console \
 && mkdir /var/www/var/tmp \
 && chmod 777 /var/www/var/tmp \
 && chown -Rf 82:82 /var/www
 
-RUN apk add nginx
+RUN ls -alsh /var/www/config
 
 COPY nginx.conf /etc/nginx/nginx.conf
 

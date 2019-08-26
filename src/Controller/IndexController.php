@@ -124,6 +124,10 @@ class IndexController extends AbstractController
     public function streamYoutube($id, Request $request)
     {
         $this->resource = $this->youtube->setId($id)->stream();
+        if (null === $this->resource) {
+            echo "resource null!";
+            exit();
+        }
         $this->streamResource();
 
         exit();

@@ -52,7 +52,8 @@ class Minio
 
     public function has($path)
     {
-        return $this->filesystem->has($path);
+        $has = $this->filesystem->has($path);
+        return $has;
     }
 
     public function listContents($path, $recursive = false)
@@ -74,5 +75,10 @@ class Minio
     public function stream($path)
     {
         return $this->filesystem->readStream($path);
+    }
+
+    public function delete($path)
+    {
+        return $this->filesystem->delete($path);
     }
 }

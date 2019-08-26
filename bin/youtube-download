@@ -1,9 +1,12 @@
 #!/bin/sh
 
+mkdir -p /var/www/var/tmp
+
 cd /var/www/var/tmp
 
-rm -rf /var/www/var/tmp/${1}.*
+rm -rf /var/www/var/tmp/*${1}.*
 
-youtube-dl -q -o "%(id)s.%(ext)s" -x ${1}
+youtube-dl -q -o "%(id)s.%(ext)s" -x "ytsearch:${1}"
+#youtube-dl --print-json -v -o "%(id)s.%(ext)s" -x ${1}
 
 ls | sort -n | head -1
